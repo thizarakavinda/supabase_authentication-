@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter_authentication/components/avatar.dart';
 import 'package:supabase_flutter_authentication/main.dart';
 
 class AccountPage extends StatefulWidget {
@@ -11,6 +12,7 @@ class AccountPage extends StatefulWidget {
 class _AccountPageState extends State<AccountPage> {
   final _usernameController = TextEditingController();
   final _webController = TextEditingController();
+  String? _imgUrl;
 
   @override
   void initState() {
@@ -35,35 +37,58 @@ class _AccountPageState extends State<AccountPage> {
     setState(() {
       _usernameController.text = userData['username'];
       _webController.text = userData['website'];
+      _imgUrl = userData['avatar_url'];
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        foregroundColor: Colors.white,
-        title: Text('Account page'),
-      ),
+      appBar: AppBar(centerTitle: true, title: Text('Account')),
       body: ListView(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
         children: [
+          Avatar(
+            imgUrl: _imgUrl,
+            onUpload: (imgUrl) async {
+              setState(() {
+                _imgUrl = imgUrl;
+              });
+              final userId = supabase.auth.currentUser!.id;
+              await supabase
+                  .from('profiles')
+                  .update({'avatar_url': imgUrl})
+                  .eq('id', userId);
+            },
+          ),
+
+          SizedBox(height: 30),
+
           TextFormField(
             onTapOutside: (event) => FocusScope.of(context).unfocus(),
             controller: _usernameController,
-            decoration: InputDecoration(label: Text('Username')),
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: Colors.grey.shade900,
+              border: OutlineInputBorder(borderSide: BorderSide.none),
+              label: Text('Username'),
+            ),
           ),
 
-          SizedBox(height: 10),
+          SizedBox(height: 30),
 
           TextFormField(
             onTapOutside: (event) => FocusScope.of(context).unfocus(),
             controller: _webController,
-            decoration: InputDecoration(label: Text('Website')),
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: Colors.grey.shade900,
+              border: OutlineInputBorder(borderSide: BorderSide.none),
+              label: Text('Website'),
+            ),
           ),
 
-          SizedBox(height: 20),
+          SizedBox(height: 50),
 
           ElevatedButton(
             onPressed: () async {

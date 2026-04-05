@@ -36,13 +36,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
-        centerTitle: true,
-        title: Text('Login'),
-      ),
+      appBar: AppBar(centerTitle: true, title: Text('Login')),
       body: ListView(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
         children: [
@@ -51,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
             controller: _emailController,
             decoration: InputDecoration(
               filled: true,
-              fillColor: Colors.grey.shade100,
+              fillColor: Colors.grey.shade900,
               border: OutlineInputBorder(borderSide: BorderSide.none),
               label: Text('Email'),
             ),
@@ -89,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                 );
               }
             },
-            child: Text('Login', style: TextStyle(color: Colors.white)),
+            child: Text('Login'),
           ),
         ],
       ),
